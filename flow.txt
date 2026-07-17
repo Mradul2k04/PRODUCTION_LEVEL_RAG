@@ -1,0 +1,294 @@
+=========================================================
+                ASK MY DOCS - PROJECT FLOW
+=========================================================
+
+TECH STACK
+---------------------------------------------------------
+Frontend        : Streamlit
+LLM             : Groq (Llama 3)
+Embeddings      : Cohere
+Vector Database : ChromaDB
+Keyword Search  : BM25
+Hybrid Search   : BM25 + Vector Search
+Re-ranking      : Cross Encoder
+Framework       : LangChain
+---------------------------------------------------------
+
+
+PHASE 1 : DOCUMENT INGESTION
+=========================================================
+
+User Uploads Documents
+        │
+        ▼
+Document Loader
+(document_loader.py)
+        │
+        ▼
+Load PDF / DOCX / TXT
+        │
+        ▼
+LangChain Documents
+        │
+        ▼
+Text Splitter
+(text_splitter.py)
+        │
+        ▼
+Create Chunks
+(chunk_size + overlap)
+        │
+        ▼
+Cohere Embeddings
+(embeddings.py)
+        │
+        ▼
+Convert Chunks → Vectors
+        │
+        ▼
+Chroma Vector Store
+(vector_store.py)
+        │
+        ▼
+Store:
+    - Chunk Text
+    - Embeddings
+    - Metadata
+        │
+        ▼
+Vector Database Ready
+
+
+=========================================================
+PHASE 2 : QUERY PROCESSING
+=========================================================
+
+User Question
+        │
+        ▼
+Query Service
+(query_service.py)
+        │
+        ▼
+Load Vector Database
+        │
+        ▼
+Hybrid Retrieval
+(hybrid_retriever.py)
+        │
+        ├──────────────►
+        │               BM25 Retriever
+        │               (Keyword Search)
+        │
+        └──────────────►
+                        Vector Retriever
+                        (Semantic Search)
+        │
+        ▼
+Ensemble Retriever
+        │
+        ▼
+Top-K Retrieved Chunks
+        │
+        ▼
+Cross Encoder Re-ranking
+(reranker.py)
+        │
+        ▼
+Sort Chunks by Relevance
+        │
+        ▼
+Best Chunks Selected
+
+
+=========================================================
+PHASE 3 : ANSWER GENERATION
+=========================================================
+
+Top Chunks
+        │
+        ▼
+RAG Prompt
+(rag_prompt.py)
+        │
+        ▼
+Question + Context
+        │
+        ▼
+Groq LLM
+(rag_chain.py)
+        │
+        ▼
+Generate Final Answer
+        │
+        ▼
+Answer + Sources
+
+
+=========================================================
+PHASE 4 : STREAMLIT UI
+=========================================================
+
+streamlit_app.py
+
+        ┌─────────────────────┐
+        │ Upload Documents    │
+        └──────────┬──────────┘
+                   │
+                   ▼
+        Ingestion Service
+                   │
+                   ▼
+           Vector Database
+
+---------------------------------------------------------
+
+        ┌─────────────────────┐
+        │ Ask Question        │
+        └──────────┬──────────┘
+                   │
+                   ▼
+            Chat Service
+                   │
+                   ▼
+            Query Service
+                   │
+                   ▼
+              RAG Flow
+                   │
+                   ▼
+         Answer + Sources
+
+
+=========================================================
+BACKEND SERVICES FLOW
+=========================================================
+
+IngestionService
+----------------
+
+Load Documents
+      │
+      ▼
+Split Documents
+      │
+      ▼
+Generate Embeddings
+      │
+      ▼
+Store in ChromaDB
+
+
+QueryService
+------------
+
+Question
+    │
+    ▼
+Hybrid Retrieval
+    │
+    ▼
+Cross Encoder Re-ranking
+    │
+    ▼
+RAG Chain
+    │
+    ▼
+Answer
+
+
+ChatService
+-----------
+
+Frontend
+    │
+    ▼
+Query Service
+    │
+    ▼
+Response
+    │
+    ▼
+Frontend
+
+
+=========================================================
+PROJECT ARCHITECTURE
+=========================================================
+
+                    USER
+                     │
+                     ▼
+             STREAMLIT UI
+                     │
+                     ▼
+           ┌─────────────────┐
+           │ Chat Service    │
+           └───────┬─────────┘
+                   │
+                   ▼
+           ┌─────────────────┐
+           │ Query Service   │
+           └───────┬─────────┘
+                   │
+         ┌─────────┴─────────┐
+         │                   │
+         ▼                   ▼
+ Vector Search          BM25 Search
+         │                   │
+         └─────────┬─────────┘
+                   ▼
+          Hybrid Retrieval
+                   │
+                   ▼
+        Cross Encoder Rerank
+                   │
+                   ▼
+             Top Chunks
+                   │
+                   ▼
+             Groq LLM
+                   │
+                   ▼
+          Final Answer
+
+
+=========================================================
+CURRENT FEATURES
+=========================================================
+
+✅ PDF Upload
+✅ DOCX Upload
+✅ TXT Upload
+✅ Chroma Vector DB
+✅ Cohere Embeddings
+✅ Hybrid Retrieval
+✅ BM25 Search
+✅ Semantic Search
+✅ Cross Encoder Re-ranking
+✅ Groq LLM
+✅ Source Citations
+✅ Streamlit UI
+✅ Multi Document Support
+✅ Logging
+✅ Exception Handling
+
+
+=========================================================
+FUTURE IMPROVEMENTS
+=========================================================
+
+□ Conversation Memory
+□ Document Deletion
+□ Duplicate File Detection
+□ User Authentication
+□ Docker Deployment
+□ Docker Compose
+□ CI/CD Pipeline
+□ Cloud Deployment
+□ Feedback System
+□ Analytics Dashboard
+
+=========================================================
+END OF FLOW
+=========================================================
