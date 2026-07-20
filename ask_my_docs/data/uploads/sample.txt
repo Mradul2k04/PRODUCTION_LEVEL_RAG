@@ -1,0 +1,17 @@
+Artificial Intelligence (AI) is one of the most transformative technologies of the modern era.
+
+Machine Learning (ML) is a subset of AI that enables computers to learn from data without being explicitly programmed.
+
+Deep Learning is a specialized branch of Machine Learning that uses neural networks with multiple hidden layers to solve complex problems such as image classification, speech recognition, and natural language processing.
+
+Retrieval-Augmented Generation (RAG) is a technique that combines information retrieval with Large Language Models (LLMs). Instead of relying only on the model's internal knowledge, RAG retrieves relevant documents from a knowledge base and uses them as context to generate more accurate and up-to-date answers.
+
+Vector databases such as ChromaDB and FAISS store document embeddings, allowing semantic search based on meaning rather than exact keyword matching.
+
+LangChain is a popular framework for building LLM-powered applications. It provides tools for document loading, text splitting, embedding generation, vector storage, retrieval, prompt management, and chaining different AI components together.
+
+Groq provides extremely fast inference for open-source language models such as Llama 3.1, making it suitable for real-time AI applications.
+
+Cohere offers high-quality embedding models that convert text into dense vector representations, which are essential for semantic search in RAG systems.
+
+A production-ready RAG application typically consists of document loaders, text preprocessing, chunking, embedding generation, vector storage, retrieval, prompt engineering, and an LLM for answer generation.
