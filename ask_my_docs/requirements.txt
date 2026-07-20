@@ -1,0 +1,62 @@
+# Core
+langchain
+langchain-core
+langchain-community
+langchain-huggingface
+langchain-groq
+langchain-chroma
+
+# Vector DB
+chromadb
+
+# Embeddings
+sentence-transformers
+
+# Retrieval
+rank-bm25
+faiss-cpu
+
+# Reranking
+sentence-transformers
+
+# LLM
+groq
+
+# Document Loaders
+pymupdf
+python-docx
+
+# Streamlit
+streamlit
+
+# Config
+python-dotenv
+pydantic
+pydantic-settings
+
+# Data
+pandas
+numpy
+
+# Evaluation
+ragas
+deepeval
+
+# Logging
+loguru
+
+# Utilities
+tqdm
+
+# Testing
+pytest
+
+# Optional OCR
+pytesseract
+Pillow
+
+docx2txt
+
+#UI 
+Streamlit
+torchvision
