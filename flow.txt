@@ -5,7 +5,7 @@
 TECH STACK
 ---------------------------------------------------------
 Frontend        : Streamlit
-LLM             : Groq (Llama 3)
+LLM             : Groq (Llama 3.1)
 Embeddings      : Cohere
 Vector Database : ChromaDB
 Keyword Search  : BM25
@@ -21,8 +21,12 @@ PHASE 1 : DOCUMENT INGESTION
 User Uploads Documents
         │
         ▼
+Ingestion Pipeline
+(ingest_pipeline.py)
+        │
+        ▼
 Document Loader
-(document_loader.py)
+(LoaderFactory)
         │
         ▼
 Load PDF / DOCX / TXT
@@ -32,7 +36,7 @@ LangChain Documents
         │
         ▼
 Text Splitter
-(text_splitter.py)
+(DocumentChunker)
         │
         ▼
 Create Chunks
@@ -40,14 +44,14 @@ Create Chunks
         │
         ▼
 Cohere Embeddings
-(embeddings.py)
+(EmbeddingFactory)
         │
         ▼
 Convert Chunks → Vectors
         │
         ▼
 Chroma Vector Store
-(vector_store.py)
+(VectorStoreFactory)
         │
         ▼
 Store:
@@ -66,15 +70,15 @@ PHASE 2 : QUERY PROCESSING
 User Question
         │
         ▼
-Query Service
-(query_service.py)
+RAG Pipeline
+(rag_pipeline.py)
         │
         ▼
 Load Vector Database
         │
         ▼
 Hybrid Retrieval
-(hybrid_retriever.py)
+(HybridRetriever)
         │
         ├──────────────►
         │               BM25 Retriever
@@ -92,7 +96,7 @@ Top-K Retrieved Chunks
         │
         ▼
 Cross Encoder Re-ranking
-(reranker.py)
+(CohereReranker)
         │
         ▼
 Sort Chunks by Relevance
@@ -109,34 +113,34 @@ Top Chunks
         │
         ▼
 RAG Prompt
-(rag_prompt.py)
+(prompt_template.py)
         │
         ▼
 Question + Context
         │
         ▼
 Groq LLM
-(rag_chain.py)
+(GroqLLM)
         │
         ▼
 Generate Final Answer
         │
         ▼
-Answer + Sources
+Answer 
 
 
 =========================================================
 PHASE 4 : STREAMLIT UI
 =========================================================
 
-streamlit_app.py
+app.py
 
         ┌─────────────────────┐
         │ Upload Documents    │
         └──────────┬──────────┘
                    │
                    ▼
-        Ingestion Service
+          IngestionPipeline
                    │
                    ▼
            Vector Database
@@ -148,24 +152,21 @@ streamlit_app.py
         └──────────┬──────────┘
                    │
                    ▼
-            Chat Service
+             RAGPipeline
                    │
                    ▼
-            Query Service
+               RAG Flow
                    │
                    ▼
-              RAG Flow
-                   │
-                   ▼
-         Answer + Sources
+                Answer 
 
 
 =========================================================
 BACKEND SERVICES FLOW
 =========================================================
 
-IngestionService
-----------------
+IngestionPipeline
+-----------------
 
 Load Documents
       │
@@ -179,8 +180,8 @@ Generate Embeddings
 Store in ChromaDB
 
 
-QueryService
-------------
+RAGPipeline
+-----------
 
 Question
     │
@@ -197,21 +198,6 @@ RAG Chain
 Answer
 
 
-ChatService
------------
-
-Frontend
-    │
-    ▼
-Query Service
-    │
-    ▼
-Response
-    │
-    ▼
-Frontend
-
-
 =========================================================
 PROJECT ARCHITECTURE
 =========================================================
@@ -223,12 +209,7 @@ PROJECT ARCHITECTURE
                      │
                      ▼
            ┌─────────────────┐
-           │ Chat Service    │
-           └───────┬─────────┘
-                   │
-                   ▼
-           ┌─────────────────┐
-           │ Query Service   │
+           │ RAGPipeline     │
            └───────┬─────────┘
                    │
          ┌─────────┴─────────┐
@@ -250,7 +231,7 @@ PROJECT ARCHITECTURE
              Groq LLM
                    │
                    ▼
-          Final Answer
+           Final Answer
 
 
 =========================================================
@@ -267,7 +248,6 @@ CURRENT FEATURES
 ✅ Semantic Search
 ✅ Cross Encoder Re-ranking
 ✅ Groq LLM
-✅ Source Citations
 ✅ Streamlit UI
 ✅ Multi Document Support
 ✅ Logging
@@ -278,6 +258,7 @@ CURRENT FEATURES
 FUTURE IMPROVEMENTS
 =========================================================
 
+□ Source Citations (Not yet implemented)
 □ Conversation Memory
 □ Document Deletion
 □ Duplicate File Detection
@@ -288,6 +269,22 @@ FUTURE IMPROVEMENTS
 □ Cloud Deployment
 □ Feedback System
 □ Analytics Dashboard
+============================================================================================================
+Execution Flow
+
+                LoaderFactory
+                    │
+      ┌─────────────┼─────────────┐
+      │             │             │
+      ▼             ▼             ▼
+ PDFLoader     DOCXLoader     TXTLoader
+      │             │             │
+      └─────────────┼─────────────┘
+                    │
+                load(file_path)
+                    │
+                    ▼
+          list[Document]
 
 =========================================================
 END OF FLOW
